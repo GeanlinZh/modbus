@@ -5,7 +5,7 @@
 package modbus
 
 import (
-	"github.com/goburrow/serial"
+	"github.com/geanlinzh/serial"
 )
 
 const (
