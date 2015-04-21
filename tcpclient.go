@@ -167,7 +167,7 @@ func (mb *tcpTransporter) Send(aduRequest []byte) (aduResponse []byte, err error
 		if err = mb.Connect(); err != nil {
 			return
 		}
-		defer mb.Close()
+		//		defer mb.Close()
 	}
 	if mb.Logger != nil {
 		mb.Logger.Printf("modbus: sending % x\n", aduRequest)
@@ -176,6 +176,7 @@ func (mb *tcpTransporter) Send(aduRequest []byte) (aduResponse []byte, err error
 		return
 	}
 	if _, err = mb.conn.Write(aduRequest); err != nil {
+		mb.Close()
 		return
 	}
 	// Read header first
