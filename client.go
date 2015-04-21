@@ -438,17 +438,21 @@ func (mb *client) ReadFIFOQueue(address uint16) (results []byte, err error) {
 func (mb *client) send(request *ProtocolDataUnit) (response *ProtocolDataUnit, err error) {
 	aduRequest, err := mb.packager.Encode(request)
 	if err != nil {
+		err = fmt.Errorf("mb.packager.Encode")
 		return
 	}
 	aduResponse, err := mb.transporter.Send(aduRequest)
 	if err != nil {
+		err = fmt.Errorf("mb.transporter.Send")
 		return
 	}
 	if err = mb.packager.Verify(aduRequest, aduResponse); err != nil {
+		err = fmt.Errorf("mb.packager.Verify")
 		return
 	}
 	response, err = mb.packager.Decode(aduResponse)
 	if err != nil {
+		err = fmt.Errorf("mb.packager.Decode")
 		return
 	}
 	// Check correct function code returned (exception)

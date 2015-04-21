@@ -95,6 +95,10 @@ func (mb *tcpPackager) Encode(pdu *ProtocolDataUnit) (adu []byte, err error) {
 
 // Verify confirms transaction, protocol and unit id.
 func (mb *tcpPackager) Verify(aduRequest []byte, aduResponse []byte) (err error) {
+	if len(aduRequest) == 0 || len(aduResponse) == 0 {
+		err = fmt.Errorf("aduRequest/aduResponse len is 0")
+		return
+	}
 	// Transaction id
 	responseVal := binary.BigEndian.Uint16(aduResponse)
 	requestVal := binary.BigEndian.Uint16(aduRequest)
@@ -124,6 +128,10 @@ func (mb *tcpPackager) Verify(aduRequest []byte, aduResponse []byte) (err error)
 //  Unit identifier: 1 byte
 func (mb *tcpPackager) Decode(adu []byte) (pdu *ProtocolDataUnit, err error) {
 	// Read length value in the header
+	if len(adu) == 0 {
+		err = fmt.Errorf("adu len is 0")
+		return
+	}
 	length := binary.BigEndian.Uint16(adu[4:])
 	pduLength := len(adu) - tcpHeaderLength
 	if pduLength <= 0 || pduLength != int(length-1) {
